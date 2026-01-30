@@ -1,0 +1,16 @@
+<div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 border border-gray-100 cursor-pointer" 
+     (click)="verDetalhes()">
+  <div class="relative h-48 w-full bg-gray-200">
+    <img [src]="pet.fotoUrl || 'assets/no-image-pet.png'" 
+         [alt]="pet.nome"
+         class="w-full h-full object-cover">
+    <span class="absolute top-2 right-2 bg-blue-600 text-white text-xs px-2 py-1 rounded-full">
+      {{ pet.especie }}
+    </span>
+  </div>
+  <div class="p-4">
+    <h3 class="text-xl font-bold text-gray-800 truncate">{{ pet.nome }}</h3>
+    <p class="text-gray-600 text-sm">Raça: {{ pet.raca }}</p>
+    <p class="text-gray-500 text-sm italic">{{ pet.idade }} anos</p>
+  </div>
+</div>

@@ -5,11 +5,10 @@ import { PetService } from '../core/services/pet.service';
 
 @Injectable({ providedIn: 'root' })
 export class PetFacade {
-  // Estado privado
+  
   private readonly _pets = new BehaviorSubject<Pet[]>([]);
   private readonly _loading = new BehaviorSubject<boolean>(false);
 
-  // Observables públicos (o componente só "ouve")
   readonly pets$ = this._pets.asObservable();
   readonly loading$ = this._loading.asObservable();
 

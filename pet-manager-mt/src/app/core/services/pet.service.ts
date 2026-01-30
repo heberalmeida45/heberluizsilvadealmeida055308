@@ -9,7 +9,6 @@ export class PetService {
 
   constructor(private http: HttpClient) {}
 
-  // Listagem com paginação e filtro
   getPets(page: number = 0, nome?: string): Observable<Pet[]> {
     let params = new HttpParams().set('page', page.toString()).set('size', '10');
     if (nome) params = params.set('nome', nome);
