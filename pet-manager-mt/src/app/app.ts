@@ -1,12 +1,27 @@
-import { Component, signal } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { AuthService } from './core/services/auth.service';
 
 @Component({
   selector: 'app-root',
+  standalone: true,
   imports: [RouterOutlet],
-  templateUrl: './app.html',
-  styleUrl: './app.scss'
+  template: '<router-outlet></router-outlet>'
 })
-export class App {
-  protected readonly title = signal('pet-manager-mt');
+export class AppComponent implements OnInit {
+  
+  constructor(private authService: AuthService) {}
+
+  ngOnInit() {
+   
+    this.authService.login('admin', 'admin').subscribe({
+      next: (res) => {
+        console.log('Autenticado com sucesso! Token salvo.');
+       
+      },
+      error: (err) => {
+        console.error('Erro na autenticação automática:', err);
+      }
+    });
+  }
 }

@@ -1,20 +1,31 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, tap } from 'rxjs';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { AuthResponse } from '../models/pet.model';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly API = 'https://pet-manager-api.geia.vip';
-  // BehaviorSubject mantém o estado do token para o Padrão Facade futuramente
   private tokenSubject = new BehaviorSubject<string | null>(localStorage.getItem('token'));
+  API_AUTH: any;
 
   constructor(private http: HttpClient) {}
 
-  login(credentials: any) {
-    return this.http.post<AuthResponse>(`${this.API}/autenticacao/login`, credentials)
-      .pipe(tap(res => this.saveTokens(res)));
+login(usuario: string, senha: string) {
+  const corpoDaRequisicao = { 
+    username: usuario, 
+    password: senha 
+  };
+
+  return this.http.post<any>(`https://pet-manager-api.geia.vip/autenticacao/login`, corpoDaRequisicao).pipe(
+   tap(res => { 
+  
+  if (res && res.access_token) {
+    localStorage.setItem('token', res.access_token);   
   }
+})
+  );
+}
 
   refreshToken() {
     const refresh = localStorage.getItem('refreshToken');

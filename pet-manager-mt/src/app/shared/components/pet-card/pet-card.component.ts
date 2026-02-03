@@ -3,6 +3,7 @@ import { Pet } from '../../../core/models/pet.model';
 
 @Component({
   selector: 'app-pet-card',
+  standalone: true,
   templateUrl: './pet-card.component.html',
   styleUrls: ['./pet-card.scss']
 })

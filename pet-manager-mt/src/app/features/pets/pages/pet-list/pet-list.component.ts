@@ -1,45 +1,43 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { Router } from '@angular/router'; 
-import { debounceTime, distinctUntilChanged } from 'rxjs';
-import { PetFacade } from '../../../../facades/pet.facade';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { ReactiveFormsModule, FormControl } from '@angular/forms';
 import { PetCardComponent } from '../../../../shared/components/pet-card/pet-card.component';
-import { PetCard } from "../../../../shared/components/pet-card/pet-card";
+import { PetFacade } from '../../../../facades/pet.facade';
+
 
 @Component({
   selector: 'app-pet-list',
-  standalone: true, 
-  imports: [CommonModule, ReactiveFormsModule, PetCardComponent], 
+  standalone: true,
+  imports: [
+    CommonModule, 
+    RouterModule, 
+    ReactiveFormsModule, 
+    PetCardComponent     
+  ],
   templateUrl: './pet-list.component.html'
 })
-export class PetListComponent implements OnInit {
+export class PetListComponent implements OnInit {  
   searchControl = new FormControl('');
-  currentPage = 0;
+  currentPage: number = 0;
 
-  constructor(
-    public petFacade: PetFacade,
-    private router: Router 
-  ) {}
+  constructor(public petFacade: PetFacade) {}
 
   ngOnInit(): void {
-    this.petFacade.carregarPets(this.currentPage);
+    this.petFacade.loadPets(this.currentPage);
 
-    this.searchControl.valueChanges.pipe(
-      debounceTime(400),
-      distinctUntilChanged()
-    ).subscribe(value => {
-      this.petFacade.carregarPets(0, value || '');
+   
+    this.searchControl.valueChanges.subscribe(valor => {
+      this.petFacade.loadPets(0, valor || '');
     });
   }
 
- 
-  irParaDetalhes(id: string) {
-    this.router.navigate(['/pets', id]);
-  }
-
   mudarPagina(proxima: boolean) {
-    this.currentPage = proxima ? this.currentPage + 1 : Math.max(0, this.currentPage - 1);
-    this.petFacade.carregarPets(this.currentPage, this.searchControl.value || '');
+    if (proxima) {
+      this.currentPage++;
+    } else if (this.currentPage > 0) {
+      this.currentPage--;
+    }
+    this.petFacade.loadPets(this.currentPage, this.searchControl.value || '');
   }
 }

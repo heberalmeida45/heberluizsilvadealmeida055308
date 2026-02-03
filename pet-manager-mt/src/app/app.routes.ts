@@ -1,9 +1,8 @@
 import { Routes } from '@angular/router';
+import { PetListComponent } from './features/pets/pages/pet-list/pet-list.component';
+import { PetDetailComponent } from './features/pets/pages/pet-detail/pet-detail.component';
 
 export const routes: Routes = [
-  { 
-    path: 'pets', 
-    loadChildren: () => import('./features/pets/pets-module').then(m => m.PetsModule) 
-  },
-  { path: '', redirectTo: 'pets', pathMatch: 'full' }
+  { path: 'pets', component: PetListComponent },
+{ path: 'pets/:id', component: PetDetailComponent }
 ];

@@ -1,0 +1,21 @@
+:host {
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+:host:hover {
+  transform: translateY(-5px); // O card sobe levemente
+}
+
+.pet-image-container {
+  position: relative;
+  overflow: hidden;
+  
+  img {
+    transition: transform 0.5s ease;
+  }
+}
+
+.pet-card-container:hover img {
+  transform: scale(1.1); // A foto do pet dá um leve zoom
+}
