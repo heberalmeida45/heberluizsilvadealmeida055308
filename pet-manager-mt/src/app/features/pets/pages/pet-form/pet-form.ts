@@ -1,47 +1,31 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { PetService } from '../../../../core/services/pet.service';
+
 
 @Component({
   selector: 'app-pet-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterModule],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './pet-form.html'
 })
-export class PetFormComponent implements OnInit {
+export class PetFormComponent {
   petForm: FormGroup;
-  isEditMode = false;
-  petId?: string;
-  selectedFile?: File;
+  selectedFile: File | null = null;
+  loading = false;
 
   constructor(
     private fb: FormBuilder,
     private petService: PetService,
-    private route: ActivatedRoute,
     private router: Router
   ) {
-    // Inicializa o formulário com validações
     this.petForm = this.fb.group({
       nome: ['', [Validators.required, Validators.minLength(3)]],
-      especie: ['', Validators.required],
-      idade: [null, [Validators.required, Validators.min(0)]],
-      raca: ['', Validators.required]
-    });
-  }
-
-  ngOnInit(): void {
-    this.petId = this.route.snapshot.paramMap.get('id') || undefined;
-    if (this.petId) {
-      this.isEditMode = true;
-      this.carregarDadosParaEdicao(this.petId);
-    }
-  }
-
-  carregarDadosParaEdicao(id: string) {
-    this.petService.getPetById(id).subscribe(pet => {
-      this.petForm.patchValue(pet); // Preenche o form com os dados do pet
+      especie: ['Cão', Validators.required],
+      raca: ['', Validators.required],
+      idade: [0, [Validators.required, Validators.min(0)]]
     });
   }
 
@@ -49,30 +33,33 @@ export class PetFormComponent implements OnInit {
     this.selectedFile = event.target.files[0];
   }
 
-  salvar() {
-    if (this.petForm.invalid) return;
-
-    const petData = this.petForm.value;
-    
-    if (this.isEditMode && this.petId) {
-      // Lógica de PUT (Edição) - Implementaremos no PetService se necessário
-      console.log('Editando pet', petData);
-    } else {
-      // Lógica de POST (Criação)
-      this.petService.createPet(petData).subscribe(newPet => {
-        if (this.selectedFile && newPet.id) {
-          this.uploadFoto(newPet.id);
-        } else {
-          this.router.navigate(['/pets']);
+  onSubmit() {
+    if (this.petForm.valid) {
+      this.loading = true;
+      
+      // Primeiro cadastra o Pet
+      this.petService.cadastrar(this.petForm.value).subscribe({
+        next: (petSalvo) => {
+          // Se houver foto, faz o upload usando o ID retornado
+          if (this.selectedFile && petSalvo.id) {
+            this.petService.uploadFoto(+petSalvo.id, this.selectedFile).subscribe({
+              next: () => this.finalizar(),
+              error: (err) => console.error('Erro no upload da foto', err)
+            });
+          } else {
+            this.finalizar();
+          }
+        },
+        error: (err) => {
+          this.loading = false;
+          alert('Erro ao cadastrar pet. Verifique se o login ainda é válido!');
         }
       });
     }
   }
 
-  uploadFoto(id: string) {
-    if (!this.selectedFile) return;
-    this.petService.uploadFoto(id, this.selectedFile).subscribe(() => {
-      this.router.navigate(['/pets']);
-    });
+  private finalizar() {
+    alert('Pet cadastrado com sucesso em Mato Grosso!');
+    this.router.navigate(['/pets']);
   }
 }

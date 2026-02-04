@@ -2,11 +2,13 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, finalize } from 'rxjs';
 import { Pet } from '../core/models/pet.model';
 import { PetService } from '../core/services/pet.service';
+import { environment } from '../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class PetFacade {
   private readonly _pets = new BehaviorSubject<Pet[]>([]);
   private readonly _loading = new BehaviorSubject<boolean>(false);
+  private readonly API = `${environment.apiPets}/pets`;
 
   readonly pets$ = this._pets.asObservable();
   readonly loading$ = this._loading.asObservable();
