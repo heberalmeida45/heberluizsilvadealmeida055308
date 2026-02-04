@@ -32,9 +32,13 @@
       <input type="file" (change)="onFileSelected($event)" class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-blue-50 file:text-blue-700">
     </div>
 
-    <button type="submit" [disabled]="petForm.invalid || loading" 
-            class="w-full bg-blue-600 text-white py-3 rounded-lg font-bold hover:bg-blue-700 disabled:bg-gray-400 transition-colors mt-6">
-      {{ loading ? 'Salvando...' : 'Cadastrar Pet' }}
-    </button>
+ <button type="submit" 
+        [disabled]="loading || petForm.invalid"
+        class="w-full py-3 rounded-xl font-bold text-white transition-all
+               {{ (loading || petForm.invalid) ? 'bg-gray-400' : 'bg-blue-700 hover:bg-blue-800' }}">
+  
+  <span *ngIf="!loading">Confirmar Cadastro</span>
+  <span *ngIf="loading">Processando...</span>
+</button>
   </form>
 </div>

@@ -35,7 +35,7 @@ export class PetDetailComponent implements OnInit {
 
   carregarDados(id: string) {
     this.loading = true;
-    this.petService.getPetById(id).subscribe({
+    this.petService.getPetById(+id).subscribe({
       next: (dadosDoPet) => {
         this.pet = dadosDoPet;
         this.loading = false;

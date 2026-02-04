@@ -5,6 +5,6 @@ import { PetFormComponent } from './features/pets/pages/pet-form/pet-form';
 
 export const routes: Routes = [
   { path: 'pets', component: PetListComponent },
-{ path: 'pets/:id', component: PetDetailComponent },
-{ path: 'pets/novo', component: PetFormComponent }
+  { path: 'pets/novo', component: PetFormComponent },
+{ path: 'pets/:id', component: PetDetailComponent }
 ];

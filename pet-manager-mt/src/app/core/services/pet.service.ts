@@ -10,28 +10,20 @@ export class PetService {
 
   constructor(private http: HttpClient) {}
 
-  cadastrar(pet: Pet) {
+  cadastrar(pet: Pet): Observable<Pet> {
     return this.http.post<Pet>(this.API, pet);
   }
-
+  getPetById(id: number): Observable<Pet> {
+    return this.http.get<Pet>(`${this.API}/${id}`);
+  }
   getPets(page: number = 0, nome?: string): Observable<Pet[]> {
     let params = new HttpParams().set('page', page.toString()).set('size', '10');
     if (nome) params = params.set('nome', nome);
     return this.http.get<Pet[]>(this.API, { params });
-   
   }
-
-  getPetById(id: string): Observable<Pet> {
-    return this.http.get<Pet>(`${this.API}/${id}`);
-  }
-
-  createPet(pet: Pet): Observable<Pet> {
-    return this.http.post<Pet>(this.API, pet);
-  }
-
   uploadFoto(id: number, foto: File): Observable<void> {
     const formData = new FormData();
-    formData.append('foto', foto);
+    formData.append('foto', foto); 
     return this.http.post<void>(`${this.API}/${id}/fotos`, formData);
   }
 }

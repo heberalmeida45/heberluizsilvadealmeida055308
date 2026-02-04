@@ -33,33 +33,41 @@ export class PetFormComponent {
     this.selectedFile = event.target.files[0];
   }
 
-  onSubmit() {
-    if (this.petForm.valid) {
-      this.loading = true;
-      
-      // Primeiro cadastra o Pet
-      this.petService.cadastrar(this.petForm.value).subscribe({
-        next: (petSalvo) => {
-          // Se houver foto, faz o upload usando o ID retornado
-          if (this.selectedFile && petSalvo.id) {
-            this.petService.uploadFoto(+petSalvo.id, this.selectedFile).subscribe({
-              next: () => this.finalizar(),
-              error: (err) => console.error('Erro no upload da foto', err)
-            });
-          } else {
-            this.finalizar();
-          }
-        },
-        error: (err) => {
-          this.loading = false;
-          alert('Erro ao cadastrar pet. Verifique se o login ainda é válido!');
-        }
-      });
-    }
+  // No seu pet-form.component.ts
+onSubmit() {
+  if (this.petForm.valid) {
+    this.loading = true; 
+    this.petService.cadastrar(this.petForm.value).subscribe({     
+next: (petSalvo) => {
+  console.log('Pet salvo com ID:', petSalvo.id);  
+  if (this.selectedFile && petSalvo.id !== undefined) {   
+    const idNumerico = Number(petSalvo.id); 
+    this.uploadFoto(idNumerico);
+  } else {
+    this.sucesso();
   }
+},
+      error: (err) => {
+        this.loading = false;
+        console.error('Erro ao cadastrar:', err);
+        alert('Erro ao salvar pet. Verifique se todos os campos estão corretos.');
+      }
+    });
+  }
+}
 
-  private finalizar() {
-    alert('Pet cadastrado com sucesso em Mato Grosso!');
-    this.router.navigate(['/pets']);
-  }
+private uploadFoto(id: number) {
+  this.petService.uploadFoto(id, this.selectedFile!).subscribe({
+    next: () => this.sucesso(),
+    error: () => {
+      alert('Pet cadastrado, mas houve erro ao subir a foto.');
+      this.sucesso(); 
+    }
+  });
+}
+
+private sucesso() {
+  this.loading = false;
+  this.router.navigate(['/pets']); 
+}
 }
