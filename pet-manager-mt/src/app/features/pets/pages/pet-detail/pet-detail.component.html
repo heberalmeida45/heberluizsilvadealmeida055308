@@ -1,26 +1,33 @@
 <div class="container mx-auto p-6 max-w-4xl">
+  
   <button routerLink="/pets" class="flex items-center text-blue-600 hover:text-blue-800 mb-6 transition-colors">
     <span class="mr-2">←</span> Voltar para a listagem
   </button>
 
-  <div *ngIf="loading" class="flex flex-col items-center justify-center my-20">
-    <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-900"></div>
-    <p class="mt-4 text-gray-600 font-medium">Carregando informações do pet...</p>
+  <div *ngIf="loading" class="flex flex-col items-center justify-center h-64 bg-white rounded-2xl shadow-sm">
+    <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-900 mb-4"></div>
+    <p class="text-blue-900 font-medium">Carregando informações do pet...</p>
   </div>
 
-  <div *ngIf="!loading && pet" class="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
+  <div *ngIf="!loading && pet" class="bg-white shadow-2xl rounded-2xl overflow-hidden border border-gray-100">
+  <div class="md:flex">
     
-    <div class="md:flex">
-      <div class="md:w-1/2 h-80 md:h-auto bg-gray-200">
-        <img [src]="pet.fotoUrl || 'assets/no-image-pet.png'" 
-             [alt]="pet.nome"
-             class="w-full h-full object-cover">
-      </div>
+    <div class="md:w-1/2 h-80 md:h-auto bg-gray-200">
+      
+     <img #petImg
+     [src]="'https://pet-manager-api.geia.vip/v1/pets/' + pet.id + '/fotos'" 
+     [alt]="pet.nome"
+     (error)="petImg.src = 'https://via.placeholder.com/400x400?text=Sem+Foto'"
+     class="w-full h-full object-cover">
+           
+    </div>
 
       <div class="md:w-1/2 p-8">
         <div class="mb-6">
-          <span class="text-blue-600 font-semibold uppercase tracking-wider text-sm">{{ pet.especie }}</span>
-          <h1 class="text-5xl font-black text-gray-900 mt-2">{{ pet.nome }}</h1>
+          <span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full font-bold uppercase tracking-wider text-xs">
+            {{ pet.especie }}
+          </span>
+          <h1 class="text-5xl font-black text-gray-900 mt-3">{{ pet.nome }}</h1>
         </div>
 
         <div class="space-y-4 border-t border-gray-100 pt-6">
@@ -34,25 +41,30 @@
           </div>
         </div>
 
-        <div *ngIf="pet.tutorId" class="mt-10 p-4 bg-blue-50 rounded-xl border border-blue-100">
+        <div class="mt-10 p-5 bg-blue-50 rounded-2xl border border-blue-100">
           <h3 class="text-blue-900 font-bold mb-3 flex items-center">
             <span class="mr-2">👤</span> Dados do Tutor
           </h3>
           
-          <div *ngIf="tutor; else loadingTutor">
-            <p class="text-gray-800"><span class="font-semibold">Nome:</span> {{ tutor.nomeCompleto }}</p>
-            <p class="text-gray-800"><span class="font-semibold">Contato:</span> {{ tutor.telefone }}</p>
-          </div>
-          
-          <ng-template #loadingTutor>
-            <p class="text-sm text-blue-400 animate-pulse">Buscando informações do tutor...</p>
-          </ng-template>
+         <div *ngIf="pet.tutores && pet.tutores.length > 0; else semTutor">
+  <div *ngIf="tutor">
+    <p class="text-gray-800"><span class="font-semibold text-blue-800">Nome:</span> {{ tutor.nome }}</p>
+    <p class="text-gray-800 mt-1"><span class="font-semibold text-blue-800">Contato:</span> {{ tutor.telefone }}</p>
+  </div>
+</div>
+
+<ng-template #semTutor>
+  <p class="text-gray-500 text-sm italic">Este pet não possui tutor vinculado.</p>
+</ng-template>
         </div>
 
-        <div *ngIf="!pet.tutorId" class="mt-10 p-4 bg-gray-50 rounded-xl border border-dashed border-gray-300 text-center">
-          <p class="text-gray-500 text-sm italic">Este pet ainda não possui um tutor vinculado.</p>
-        </div>
       </div>
     </div>
   </div>
+
+  <div *ngIf="!loading && !pet" class="text-center py-20 bg-gray-50 rounded-2xl border-2 border-dashed border-gray-200">
+    <p class="text-gray-400 text-xl font-medium">Ops! Não conseguimos localizar os dados deste pet.</p>
+    <button routerLink="/pets" class="mt-4 text-blue-600 font-bold hover:underline">Voltar para a lista</button>
+  </div>
+
 </div>

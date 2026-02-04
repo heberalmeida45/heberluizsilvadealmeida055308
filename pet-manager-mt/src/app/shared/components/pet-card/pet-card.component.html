@@ -1,7 +1,7 @@
 <div class="pet-card-container bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100 h-full flex flex-col">
   
   <div class="pet-image-container h-48 bg-blue-50 flex items-center justify-center">
-    <img [src]="pet.fotoUrl || 'https://placehold.co/400x300/1e3a8a/ffffff?text=Pet+MT'" 
+    <img [src]="pet.foto || 'https://placehold.co/400x300/1e3a8a/ffffff?text=Pet+MT'" 
      class="card-img-top" 
      [alt]="pet.nome">
     
@@ -18,9 +18,10 @@
     
     <div class="flex justify-between items-center mt-4">
       <span class="text-blue-900 font-semibold text-lg">{{ pet.idade }} anos</span>
-      <button class="bg-blue-100 text-blue-900 hover:bg-blue-900 hover:text-white px-4 py-2 rounded-lg font-medium transition-all">
-        Ver Detalhes
-      </button>
+      <button [routerLink]="['/pets', pet.id]" 
+        class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg text-sm font-semibold transition-colors">
+  Ver Detalhes
+</button>
     </div>
   </div>
 </div>

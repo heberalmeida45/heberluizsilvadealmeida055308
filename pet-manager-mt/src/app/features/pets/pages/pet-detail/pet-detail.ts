@@ -36,8 +36,8 @@ export class PetDetailComponent implements OnInit {
         this.pet = dados;
         this.loading = false;
       
-        if (dados.tutorId) {
-          console.log('Este pet tem o tutor ID:', dados.tutorId);
+        if (dados.tutores) {
+          console.log('Este pet tem o tutor ID:', dados.tutores);
         }
       },
       error: (err) => {

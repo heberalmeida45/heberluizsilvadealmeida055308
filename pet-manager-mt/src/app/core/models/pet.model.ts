@@ -1,21 +1,30 @@
-export interface Pet {
-  id?: string;
+export interface Foto {
+  id: number;
   nome: string;
-  especie: string;
-  idade: number;
-  raca: string;
-  fotoUrl?: string;
-  tutorId?: string;
+  contentType: string;
+  url: string;
 }
 
 export interface Tutor {
-  id?: string;
-  nomeCompleto: string;
+  id: number;
+  nome: string;
+  email: string;
   telefone: string;
   endereco: string;
-  fotoUrl?: string;
-  pets?: Pet[];
+  cpf: number;
+  foto?: Foto; 
 }
+
+export interface Pet {
+  id: number;
+  nome: string;
+  raca: string;
+  idade: number;
+  especie?: string; 
+  foto?: Foto;      
+  tutores: Tutor[]; 
+}
+
 
 export interface AuthResponse {
   token: string;
