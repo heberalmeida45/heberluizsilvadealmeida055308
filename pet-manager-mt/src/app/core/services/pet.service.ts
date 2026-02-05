@@ -21,7 +21,7 @@ export class PetService {
     if (nome) params = params.set('nome', nome);
     return this.http.get<Pet[]>(this.API, { params });
   }
-  uploadFoto(id: number, foto: File): Observable<void> {
+  uploadFoto(id: number, foto: File): Observable<any> {
     const formData = new FormData();
     formData.append('foto', foto); 
     return this.http.post<void>(`${this.API}/${id}/fotos`, formData);

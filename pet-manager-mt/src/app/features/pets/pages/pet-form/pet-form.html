@@ -1,4 +1,7 @@
 <div class="max-w-2xl mx-auto mt-10 p-6 bg-white rounded-xl shadow-lg border border-gray-100">
+  <div *ngIf="tutorIdVinculado" class="mb-4 p-3 bg-green-100 text-green-700 rounded-lg border border-green-200 text-sm">
+  ✅ Vinculando este pet ao Tutor ID: <strong>{{ tutorIdVinculado }}</strong>
+</div>
   <h2 class="text-2xl font-bold text-blue-900 mb-6 text-center">Cadastrar Novo Pet - MT</h2>
 
   <form [formGroup]="petForm" (ngSubmit)="onSubmit()" class="space-y-4">

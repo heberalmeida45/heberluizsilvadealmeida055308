@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-
 import { Router } from '@angular/router';
 import { TutorService } from '../../../core/services/tutor.service';
 
@@ -26,7 +25,7 @@ export class TutorFormComponent {
       email: ['', [Validators.required, Validators.email]],
       telefone: ['', [Validators.required]],
       endereco: ['', [Validators.required]],
-      cpf: ['', [Validators.required, Validators.pattern(/^\d{11}$/)]] // CPF apenas números
+      cpf: ['', [Validators.required, Validators.pattern(/^\d{11}$/)]] 
     });
   }
 
@@ -41,9 +40,9 @@ export class TutorFormComponent {
 
     console.log('Dados que estão saindo para a API:', dadosParaEnviar);
 
-    this.tutorService.createTutor(dadosParaEnviar).subscribe({
+   this.tutorService.createTutor(dadosParaEnviar).subscribe({
   next: (tutorCriado) => {
-    alert('Tutor cadastrado! Agora vamos cadastrar o pet.');
+    alert('Tutor cadastrado! Agora vamos cadastrar o pet.');   
     this.router.navigate(['/pets/novo'], { queryParams: { tutorId: tutorCriado.id } });
   },
   error: (err) => {
