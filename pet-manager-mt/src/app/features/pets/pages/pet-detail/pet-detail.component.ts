@@ -58,7 +58,7 @@ export class PetDetailComponent implements OnInit {
 }
 
   buscarTutor(tutorId: string) {
-    this.tutorService.getTutorById(tutorId).subscribe({
+    this.tutorService.buscarPorId(tutorId).subscribe({
       next: (dadosTutor) => {
         this.tutor = dadosTutor;
         this.cdr.detectChanges(); 

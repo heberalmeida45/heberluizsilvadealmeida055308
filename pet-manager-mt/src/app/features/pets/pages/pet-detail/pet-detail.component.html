@@ -1,6 +1,6 @@
 <div class="container mx-auto p-6 max-w-4xl">
   
-  <button routerLink="/pets" class="flex items-center text-blue-600 hover:text-blue-800 mb-6 transition-colors">
+  <button routerLink="/pets" class="flex items-center text-blue-600 hover:text-blue-800 mb-6 transition-colors font-bold">
     <span class="mr-2">←</span> Voltar para a listagem
   </button>
 
@@ -10,31 +10,22 @@
   </div>
 
   <div *ngIf="!loading && pet" class="bg-white shadow-2xl rounded-2xl overflow-hidden border border-gray-100">
-  <div class="md:flex">
-    
-<<<<<<< HEAD
-    <div class="relative w-full h-80 mb-6">
-  <img *ngIf="pet?.foto?.url" 
-     [src]="pet.foto?.url" 
-     alt="Foto do Pet">
+    <div class="md:flex">
       
-  
-  <div *ngIf="!pet?.foto?.url" 
-       class="w-full h-full bg-gray-200 rounded-3xl flex items-center justify-center">
-    <span class="text-gray-400 italic">Sem foto disponível</span>
-  </div>
-</div>
-=======
-    <div class="md:w-1/2 h-80 md:h-auto bg-gray-200">
-      
-     <img #petImg
-     [src]="'https://pet-manager-api.geia.vip/v1/pets/' + pet.id + '/fotos'" 
-     [alt]="pet.nome"
-     (error)="petImg.src = 'https://via.placeholder.com/400x400?text=Sem+Foto'"
-     class="w-full h-full object-cover">
-           
-    </div>
->>>>>>> deb8838b68351c5a7ca028964bc7cd557a5cc154
+      <div class="md:w-1/2 h-80 md:h-auto bg-gray-100 flex items-center justify-center overflow-hidden">
+        <img *ngIf="pet?.foto?.url" 
+             [src]="pet.foto?.url" 
+             class="w-full h-full object-cover"
+             alt="Foto de {{ pet.nome }}">
+             
+        <div *ngIf="!pet?.foto?.url" 
+             class="w-full h-full flex flex-col items-center justify-center text-gray-400 bg-gray-200">
+          <svg class="w-16 h-16 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+          </svg>
+          <span class="italic font-medium">Sem foto disponível</span>
+        </div>
+      </div>
 
       <div class="md:w-1/2 p-8">
         <div class="mb-6">
@@ -60,18 +51,17 @@
             <span class="mr-2">👤</span> Dados do Tutor
           </h3>
           
-         <div *ngIf="pet.tutores && pet.tutores.length > 0; else semTutor">
-  <div *ngIf="tutor">
-    <p class="text-gray-800"><span class="font-semibold text-blue-800">Nome:</span> {{ tutor.nome }}</p>
-    <p class="text-gray-800 mt-1"><span class="font-semibold text-blue-800">Contato:</span> {{ tutor.telefone }}</p>
-  </div>
-</div>
+          <div *ngIf="pet.tutores && pet.tutores.length > 0; else semTutor">
+            <div *ngIf="tutor">
+              <p class="text-gray-800"><span class="font-semibold text-blue-800">Nome:</span> {{ tutor.nome }}</p>
+              <p class="text-gray-800 mt-1"><span class="font-semibold text-blue-800">Contato:</span> {{ tutor.telefone }}</p>
+            </div>
+          </div>
 
-<ng-template #semTutor>
-  <p class="text-gray-500 text-sm italic">Este pet não possui tutor vinculado.</p>
-</ng-template>
+          <ng-template #semTutor>
+            <p class="text-gray-500 text-sm italic">Este pet não possui tutor vinculado.</p>
+          </ng-template>
         </div>
-
       </div>
     </div>
   </div>

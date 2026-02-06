@@ -1,14 +1,7 @@
-<<<<<<< HEAD
 import { Component, OnInit } from '@angular/core';
 import { CommonModule, Location } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-=======
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
->>>>>>> deb8838b68351c5a7ca028964bc7cd557a5cc154
 import { TutorService } from '../../../core/services/tutor.service';
 
 @Component({
@@ -17,136 +10,109 @@ import { TutorService } from '../../../core/services/tutor.service';
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './tutor-form.html'
 })
-<<<<<<< HEAD
 export class TutorFormComponent implements OnInit {
   tutorForm: FormGroup;
   loading = false;
   isEdicao = false;
   tutorId: number | null = null;
   selectedFile: File | null = null;
-=======
-export class TutorFormComponent {
-  tutorForm: FormGroup;
-  loading = false;
->>>>>>> deb8838b68351c5a7ca028964bc7cd557a5cc154
+  petsVinculados: any[] = [];
 
   constructor(
     private fb: FormBuilder,
     private tutorService: TutorService,
-<<<<<<< HEAD
     private router: Router,
     private route: ActivatedRoute, 
     private location: Location
   ) {
-=======
-    private router: Router
-  ) {
-  
->>>>>>> deb8838b68351c5a7ca028964bc7cd557a5cc154
     this.tutorForm = this.fb.group({
       nome: ['', [Validators.required, Validators.minLength(3)]],
       email: ['', [Validators.required, Validators.email]],
       telefone: ['', [Validators.required]],
       endereco: ['', [Validators.required]],
-<<<<<<< HEAD
       cpf: ['', [Validators.required]] 
     });
   }
 
- ngOnInit(): void {
-
-  this.loading = false; 
-  const id = this.route.snapshot.params['id'];
-  
-  if (id) {
-    this.isEdicao = true;
-    this.tutorId = id;
-    this.carregarDadosParaEdicao(id);
-  } else {
-    this.isEdicao = false;
-    this.tutorId = null;
-    this.tutorForm.reset();
-  }
-}
-
-petsVinculados: any[] = [];
-
-private carregarDadosParaEdicao(id: number) {
-  this.loading = true;
-  
-  this.tutorService.buscarPorId(id).subscribe({
-    next: (tutor) => {
-      if (tutor) {
-        this.tutorForm.patchValue({
-          nome: tutor.nome,
-          email: tutor.email,
-          telefone: tutor.telefone,
-          endereco: tutor.endereco,
-          cpf: tutor.cpf
-        });      
-        this.petsVinculados = tutor.pets || []; 
-        
-        this.formatarCamposIniciais();
-      }
-      this.loading = false;
-    },
-    error: (err) => {
-      this.loading = false;
-      console.error('Erro ao buscar tutor por ID:', err);
-      alert('Não foi possível encontrar este tutor na base da GEIA.');
-      this.location.back(); 
-    }
-  });
-}
-
-salvarTutor() {
-  if (this.tutorForm.invalid) return;
-
-  this.loading = true;   
-  const dados = { 
-    ...this.tutorForm.value,
-    cpf: this.tutorForm.value.cpf.replace(/\D/g, ''),
-    telefone: this.tutorForm.value.telefone.replace(/\D/g, '')
-  };
-
-  const operacao = this.isEdicao 
-    ? this.tutorService.atualizar(this.tutorId!, dados) 
-    : this.tutorService.createTutor(dados);
-
-  operacao.subscribe({
-   next: (res) => {
-
- const idParaFoto = this.isEdicao ? this.tutorId! : res.id;
-
-if (this.selectedFile) {
-  this.tutorService.uploadFoto(idParaFoto, this.selectedFile).subscribe({
-    next: (tutorAtualizado) => {   
-      this.tutorForm.patchValue({ foto: tutorAtualizado.foto });
-      alert('Foto enviada com sucesso!');
-      this.finalizar(idParaFoto);
-    },
-    error: (err) => alert('Erro no upload da foto.')
-  });
-} else {
-    alert('Tutor salvo com sucesso!');
-    this.finalizar(idParaFoto);
-  }
-}
-  });
-}
-
-  private verificarFotoOuSucesso(id: number) {
-    if (this.selectedFile) {
-      this.tutorService.uploadFoto(id, this.selectedFile).subscribe({
-        next: () => this.finalizar(id),
-        error: () => {
-          alert('Dados salvos, mas houve erro na foto.');
-          this.finalizar(id);
-        }
-      });
+  ngOnInit(): void {
+    const id = this.route.snapshot.params['id'];
+    
+    if (id) {
+      this.isEdicao = true;
+      this.tutorId = id;
+      this.carregarDadosParaEdicao(id);
     } else {
-      this.finalizar(id);
+      this.isEdicao = false;
+      this.tutorId = null;
+      this.tutorForm.reset();
     }
+  }
+
+  private carregarDadosParaEdicao(id: number) {
+    this.loading = true;
+    this.tutorService.buscarPorId(id).subscribe({
+      next: (tutor) => {
+        if (tutor) {
+          this.tutorForm.patchValue({
+            nome: tutor.nome,
+            email: tutor.email,
+            telefone: tutor.telefone,
+            endereco: tutor.endereco,
+            cpf: tutor.cpf
+          });      
+          this.petsVinculados = tutor.pets || []; 
+          this.formatarCamposIniciais();
+        }
+        this.loading = false;
+      },
+      error: (err) => {
+        this.loading = false;
+        console.error('Erro ao buscar tutor por ID:', err);
+        alert('Não foi possível encontrar este tutor na base da GEIA.');
+        this.location.back(); 
+      }
+    });
+  }
+
+  salvarTutor() {
+    if (this.tutorForm.invalid) return;
+
+    this.loading = true;   
+    const dados = { 
+      ...this.tutorForm.value,
+      cpf: this.tutorForm.value.cpf.replace(/\D/g, ''),
+      telefone: this.tutorForm.value.telefone.replace(/\D/g, '')
+    };
+
+    const operacao = this.isEdicao 
+      ? this.tutorService.atualizar(this.tutorId!, dados) 
+      : this.tutorService.createTutor(dados);
+
+    operacao.subscribe({
+      next: (res) => {
+        const idParaFoto = this.isEdicao ? this.tutorId! : res.id;
+
+        if (this.selectedFile) {
+          this.tutorService.uploadFoto(idParaFoto, this.selectedFile).subscribe({
+            next: (tutorAtualizado) => {   
+              alert('Dados e foto salvos com sucesso!');
+              this.finalizar(idParaFoto);
+            },
+            error: (err) => {
+              alert('Dados salvos, mas houve erro no upload da foto.');
+              this.finalizar(idParaFoto);
+            }
+          });
+        } else {
+          alert('Tutor salvo com sucesso!');
+          this.finalizar(idParaFoto);
+        }
+      },
+      error: (err) => {
+        this.loading = false;
+        alert('Erro ao salvar tutor.');
+      }
+    });
   }
 
   private finalizar(id: number) {
@@ -168,101 +134,55 @@ if (this.selectedFile) {
     }
   }
 
-mascaraTelefone(event: any) {
-  const valorInput = event?.target?.value;
-  if (valorInput === null || valorInput === undefined) return;
- 
-  let valor = String(valorInput).replace(/\D/g, ""); 
-  
-  if (!valor) return; 
-
-  valor = valor.replace(/^(\d{2})(\d)/g, "($1) $2");
-  valor = valor.replace(/(\d{5})(\d)/, "$1-$2");
-  this.tutorForm.patchValue({ telefone: valor }, { emitEvent: false });
-}
-
-mascaraCPF(event: any) {
-  const valorInput = event?.target?.value;
-  if (valorInput === null || valorInput === undefined) return;
-
-  let valor = String(valorInput).replace(/\D/g, ""); 
-  
-  if (!valor) return; 
-
-  valor = valor.replace(/(\d{3})(\d)/, "$1.$2");
-  valor = valor.replace(/(\d{3})(\d)/, "$1.$2");
-  valor = valor.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
-  this.tutorForm.patchValue({ cpf: valor }, { emitEvent: false });
-}
-
-private formatarCamposIniciais() {
-  const tel = this.tutorForm.get('telefone')?.value;
-  const cpf = this.tutorForm.get('cpf')?.value;
-
-  if (tel) {
-    this.mascaraTelefone({ target: { value: tel } });
+  mascaraTelefone(event: any) {
+    let valor = event.target.value.replace(/\D/g, "");
+    if (!valor) return;
+    valor = valor.replace(/^(\d{2})(\d)/g, "($1) $2");
+    valor = valor.replace(/(\d{5})(\d)/, "$1-$2");
+    this.tutorForm.patchValue({ telefone: valor }, { emitEvent: false });
   }
-  if (cpf) {
-    this.mascaraCPF({ target: { value: cpf } });
-  }
-}
-vincularNovoPet(petId: number) {
-  this.tutorService.vincularPet(this.tutorId!, petId).subscribe({
-    next: () => {
-      alert('Pet vinculado com sucesso!');
-      this.carregarDadosParaEdicao(this.tutorId!); // Recarrega a lista
-    },
-    error: (err) => console.error('Erro ao vincular:', err)
-  });
-}
 
-removerPet(petId: number) {
-  if (confirm('Deseja realmente remover o vínculo deste pet?')) {
-    this.tutorService.removerVinculoPet(this.tutorId!, petId).subscribe({
+  mascaraCPF(event: any) {
+    let valor = event.target.value.replace(/\D/g, "");
+    if (!valor) return;
+    valor = valor.replace(/(\d{3})(\d)/, "$1.$2");
+    valor = valor.replace(/(\d{3})(\d)/, "$1.$2");
+    valor = valor.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+    this.tutorForm.patchValue({ cpf: valor }, { emitEvent: false });
+  }
+
+  private formatarCamposIniciais() {
+    const tel = this.tutorForm.get('telefone')?.value;
+    const cpf = this.tutorForm.get('cpf')?.value;
+    if (tel) this.mascaraTelefone({ target: { value: tel } });
+    if (cpf) this.mascaraCPF({ target: { value: cpf } });
+  }
+
+  vincularNovoPet(petId: number) {
+    this.tutorService.vincularPet(this.tutorId!, petId).subscribe({
       next: () => {
-        // Remove da lista local para atualizar a interface rápido
-        this.petsVinculados = this.petsVinculados.filter(p => p.id !== petId);
-        alert('Vínculo removido!');
+        alert('Pet vinculado com sucesso!');
+        this.carregarDadosParaEdicao(this.tutorId!);
       },
-      error: (err) => alert('Erro ao remover vínculo.')
-    });
-  }
-}
-irParaNovoPet() {
-  if (this.tutorId) {
-
-    this.router.navigate(['/pets/novo'], { 
-      queryParams: { tutorId: this.tutorId } 
-    });
-  } else {
-    alert('Erro: ID do tutor não encontrado para vinculação.');
-=======
-      cpf: ['', [Validators.required, Validators.pattern(/^\d{11}$/)]] 
+      error: (err) => console.error('Erro ao vincular:', err)
     });
   }
 
- salvarTutor() {
-  if (this.tutorForm.valid) {
-    this.loading = true;    
-    
-    const dadosParaEnviar = {
-      ...this.tutorForm.value,    
-      cpf: Number(this.tutorForm.value.cpf.replace(/\D/g, ''))
-    };
-
-    console.log('Dados que estão saindo para a API:', dadosParaEnviar);
-
-   this.tutorService.createTutor(dadosParaEnviar).subscribe({
-  next: (tutorCriado) => {
-    alert('Tutor cadastrado! Agora vamos cadastrar o pet.');   
-    this.router.navigate(['/pets/novo'], { queryParams: { tutorId: tutorCriado.id } });
-  },
-  error: (err) => {
-    this.loading = false;
-    alert('Erro ao salvar tutor.');
+  removerPet(petId: number) {
+    if (confirm('Deseja realmente remover o vínculo deste pet?')) {
+      this.tutorService.removerVinculoPet(this.tutorId!, petId).subscribe({
+        next: () => {
+          this.petsVinculados = this.petsVinculados.filter(p => p.id !== petId);
+          alert('Vínculo removido!');
+        },
+        error: (err) => alert('Erro ao remover vínculo.')
+      });
+    }
   }
-});
->>>>>>> deb8838b68351c5a7ca028964bc7cd557a5cc154
+
+  irParaNovoPet() {
+    if (this.tutorId) {
+      this.router.navigate(['/pets/novo'], { queryParams: { tutorId: this.tutorId } });
+    }
   }
-}
 }

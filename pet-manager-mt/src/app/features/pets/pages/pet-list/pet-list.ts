@@ -5,10 +5,7 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { PetFacade } from '../../../../facades/pet.facade';
 import { PetCardComponent } from '../../../../shared/components/pet-card/pet-card.component';
-<<<<<<< HEAD
 import { PetService } from '../../../../core/services/pet.service';
-=======
->>>>>>> deb8838b68351c5a7ca028964bc7cd557a5cc154
 
 @Component({
   selector: 'app-pet-list',
@@ -27,7 +24,6 @@ export class PetList implements OnInit {
   searchControl = new FormControl('');
   currentPage = 0;
 
-<<<<<<< HEAD
   constructor(
     public petFacade: PetFacade,
     private petService: PetService 
@@ -36,12 +32,6 @@ export class PetList implements OnInit {
   ngOnInit(): void {
     this.petFacade.loadPets(this.currentPage);
     
-=======
-  constructor(public petFacade: PetFacade) {}
-
-  ngOnInit(): void {
-    this.petFacade.loadPets(this.currentPage);
->>>>>>> deb8838b68351c5a7ca028964bc7cd557a5cc154
     this.searchControl.valueChanges.pipe(
       debounceTime(300),
       distinctUntilChanged()
@@ -60,38 +50,38 @@ export class PetList implements OnInit {
     
     this.petFacade.loadPets(this.currentPage, this.searchControl.value || '');
   }
-<<<<<<< HEAD
 
- excluir(pet: any) {
-  if (confirm(`Deseja realmente excluir o pet "${pet.nome}"?`)) {   
-   
-    if (pet.foto && pet.foto.id) {
-      this.petService.excluirFoto(pet.id, pet.foto.id).subscribe({
-        next: () => {
-          console.log('Foto removida, agora excluindo o pet...');
-          this.executarExclusaoFinal(pet.id);
-        },
-        error: (err) => {
-          console.error('Erro ao remover foto:', err);         
-          this.executarExclusaoFinal(pet.id);
-        }
-      });
-    } else {
-      this.executarExclusaoFinal(pet.id);
+  excluir(pet: any) {
+    if (confirm(`Deseja realmente excluir o pet "${pet.nome}"?`)) {    
+      
+      // Lógica importante: Se o pet tem foto, removemos a foto primeiro
+      if (pet.foto && pet.foto.id) {
+        this.petService.excluirFoto(pet.id, pet.foto.id).subscribe({
+          next: () => {
+            console.log('Foto removida, agora excluindo o pet...');
+            this.executarExclusaoFinal(pet.id);
+          },
+          error: (err) => {
+            console.error('Erro ao remover foto, tentando excluir pet mesmo assim:', err);         
+            this.executarExclusaoFinal(pet.id);
+          }
+        });
+      } else {
+        this.executarExclusaoFinal(pet.id);
+      }
     }
   }
-}
-private executarExclusaoFinal(petId: number) {
-  this.petService.excluirPet(petId).subscribe({
-    next: () => {
-      alert('Pet removido com sucesso!');
-      this.petFacade.loadPets(this.currentPage, this.searchControl.value || '');
-    },
-    error: (err) => {
-      alert('Erro ao excluir pet. O servidor ainda detecta vínculos ativos.');
-    }
-  });
-}
-=======
->>>>>>> deb8838b68351c5a7ca028964bc7cd557a5cc154
+
+  private executarExclusaoFinal(petId: number) {
+    this.petService.excluirPet(petId).subscribe({
+      next: () => {
+        alert('Pet removido com sucesso!');
+        // Recarrega a lista usando a Facade para atualizar a tela
+        this.petFacade.loadPets(this.currentPage, this.searchControl.value || '');
+      },
+      error: (err) => {
+        alert('Erro ao excluir pet. O servidor ainda detecta vínculos ativos.');
+      }
+    });
+  }
 }

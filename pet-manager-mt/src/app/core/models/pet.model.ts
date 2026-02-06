@@ -18,26 +18,12 @@ export interface Tutor {
 export interface Pet {
   id: number;
   nome: string;
-<<<<<<< HEAD
   especie?: string;
   raca: string;
   idade: number;
-  foto?: {
-    id: number;
-    nome: string;
-    contentType: string;
-    url: string;
-  };
+  foto?: Foto; 
   tutores: Tutor[];
-=======
-  raca: string;
-  idade: number;
-  especie?: string; 
-  foto?: Foto;      
-  tutores: Tutor[]; 
->>>>>>> deb8838b68351c5a7ca028964bc7cd557a5cc154
 }
-
 
 export interface AuthResponse {
   token: string;
