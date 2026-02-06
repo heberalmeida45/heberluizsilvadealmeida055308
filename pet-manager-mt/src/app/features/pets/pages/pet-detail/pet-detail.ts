@@ -31,13 +31,13 @@ export class PetDetailComponent implements OnInit {
 
   carregarDados(id: string) {
     this.loading = true;
-    this.petService.getPetById(id).subscribe({
+    this.petService.getPetById(+id).subscribe({
       next: (dados) => {
         this.pet = dados;
         this.loading = false;
       
-        if (dados.tutorId) {
-          console.log('Este pet tem o tutor ID:', dados.tutorId);
+        if (dados.tutores) {
+          console.log('Este pet tem o tutor ID:', dados.tutores);
         }
       },
       error: (err) => {

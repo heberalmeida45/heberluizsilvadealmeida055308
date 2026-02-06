@@ -1,34 +1,51 @@
 <div class="container mx-auto p-6">
   <div class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
     <h1 class="text-3xl font-extrabold text-blue-900">Pets Mato Grosso</h1>
-    <button routerLink="/pets/novo" 
-        class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-6 rounded-lg transition-colors shadow-lg">
-  + Cadastrar Novo Pet
-</button>
+    
+    <div class="flex gap-2">
+      <button routerLink="/pets/novo" 
+              class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-6 rounded-lg transition-colors shadow-lg">
+        + Cadastrar Novo Pet
+      </button>
+      <button routerLink="/tutores/novo" 
+              class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg transition-colors shadow-lg">
+        + Novo Tutor
+      </button>
+    </div>
+
     <input [formControl]="searchControl" type="text" 
            placeholder="Buscar pet por nome..." 
            class="w-full md:w-96 p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none">
   </div>
 
-  <div *ngIf="petFacade.loading$ | async" class="flex justify-center my-10">
-    <p>Carregando pets da SEPLAG...</p>
-    <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-900"></div>
+  <div *ngIf="petFacade.loading$ | async" class="flex flex-col items-center justify-center my-10">
+    <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-900 mb-4"></div>
+    <p class="text-blue-900 font-semibold">Buscando na base de dados...</p>
   </div>
-<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-  <app-pet-card 
-    *ngFor="let pet of (petFacade.pets$ | async)" 
-    [pet]="pet">
-  </app-pet-card>
-</div>
-<div *ngIf="(petFacade.pets$ | async)?.length === 0" class="text-center py-10">
-  <p class="text-gray-500">Nenhum pet encontrado.</p>
-</div>
 
-  <div class="flex justify-center mt-10 gap-4">
-    <button (click)="mudarPagina(false)" [disabled]="currentPage === 0"
-            class="px-4 py-2 bg-gray-200 rounded disabled:opacity-50">Anterior</button>
-    <span class="py-2">Página {{ currentPage + 1 }}</span>
-    <button (click)="mudarPagina(true)" 
-            class="px-4 py-2 bg-blue-600 text-white rounded">Próxima</button>
-  </div>
+  <ng-container *ngIf="(petFacade.pets$ | async) as pets">
+    <div *ngIf="pets.length > 0" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <app-pet-card 
+        *ngFor="let p of pets" 
+        [pet]="p"
+        (clickExcluir)="excluir($event)"> 
+      </app-pet-card>
+    </div>
+    
+    <div *ngIf="pets.length === 0 && !(petFacade.loading$ | async)" class="text-center py-20 bg-gray-50 rounded-2xl border-2 border-dashed border-gray-200">
+      <p class="text-gray-500 text-lg">Nenhum pet encontrado para esta busca.</p>
+    </div>
+
+    <div *ngIf="pets.length > 0 || currentPage > 0" class="flex justify-center mt-10 gap-4">
+      <button (click)="mudarPagina(false)" [disabled]="currentPage === 0"
+              class="px-4 py-2 bg-gray-200 rounded-lg disabled:opacity-50 font-medium">
+        Anterior
+      </button>
+      <span class="py-2 font-bold text-blue-900">Página {{ currentPage + 1 }}</span>
+      <button (click)="mudarPagina(true)" [disabled]="pets.length < 10" 
+              class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50">
+        Próxima
+      </button>
+    </div>
+  </ng-container>
 </div>

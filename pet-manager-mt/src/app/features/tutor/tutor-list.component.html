@@ -1,0 +1,88 @@
+<div class="container mx-auto p-6 max-w-6xl">
+  <div class="flex flex-col md:flex-row justify-between items-center mb-10 gap-4">
+    <div>
+      <h1 class="text-4xl font-black text-gray-900 tracking-tight">Tutores</h1>
+      <p class="text-gray-500 font-medium">Gerencie os responsáveis cadastrados ({{ tutores.length }})</p>
+    </div>
+    <button routerLink="/tutores/novo" 
+            class="bg-blue-900 text-white px-8 py-3 rounded-2xl font-bold hover:bg-blue-800 transition-all shadow-lg flex items-center gap-2">
+      <span class="text-xl">+</span> Novo Tutor
+    </button>
+  </div>
+
+  <div *ngIf="loading" class="flex flex-col items-center justify-center py-20">
+    <div class="animate-spin rounded-full h-12 w-12 border-b-4 border-blue-900"></div>
+    <p class="mt-4 text-gray-500 font-bold animate-pulse">Buscando dados na GEIA...</p>
+  </div>
+
+  <div *ngIf="!loading && tutores.length === 0 && currentPage === 0" 
+       class="bg-white rounded-[3rem] p-20 text-center shadow-sm border border-dashed border-gray-200">
+    <div class="text-6xl mb-4">👥</div>
+    <h3 class="text-xl font-bold text-gray-800">Nenhum tutor encontrado</h3>
+    <p class="text-gray-400">A base de dados não retornou registros no momento.</p>
+  </div>
+
+  <div *ngIf="!loading && tutores.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+    <div *ngFor="let t of tutores" 
+         class="group bg-white rounded-[2.5rem] p-6 shadow-sm border border-gray-100 hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 relative overflow-hidden">
+      
+      <div class="absolute top-0 left-0 w-full h-2 bg-blue-900"></div>
+
+      <div class="flex flex-col items-center">
+        <div class="relative mb-4">
+          <img *ngIf="t.foto?.url" [src]="t.foto.url" 
+               class="w-20 h-20 rounded-3xl object-cover shadow-md border-2 border-white group-hover:scale-105 transition-transform">
+          
+          <div *ngIf="!t.foto?.url" 
+               class="w-20 h-20 bg-blue-50 rounded-3xl flex items-center justify-center text-blue-900 text-3xl font-black shadow-inner">
+            {{ t.nome?.charAt(0) }}
+          </div>
+          <div class="absolute -bottom-1 -right-1 bg-green-500 w-5 h-5 rounded-full border-4 border-white"></div>
+        </div>
+
+        <h3 class="text-xl font-black text-gray-800 text-center line-clamp-1">{{ t.nome }}</h3>
+        <p class="text-gray-400 text-sm font-medium mb-4">{{ t.email || 'Sem e-mail' }}</p>
+
+        <div class="w-full space-y-2 mb-6 text-sm">
+          <div class="flex justify-between items-center bg-gray-50 p-3 rounded-xl">
+            <span class="text-[10px] font-bold text-gray-400 uppercase">CPF</span>
+            <span class="font-bold text-gray-700">{{ t.cpf }}</span>
+          </div>
+          <div class="flex justify-between items-center bg-gray-50 p-3 rounded-xl">
+            <span class="text-[10px] font-bold text-gray-400 uppercase">Telefone</span>
+            <span class="font-bold text-gray-700">{{ t.telefone }}</span>
+          </div>
+        </div>
+
+        <div class="flex w-full gap-3">
+          <button [routerLink]="['/tutores/editar', t.id]" 
+                  class="flex-1 bg-gray-900 text-white py-3 rounded-2xl font-bold text-sm hover:bg-blue-800 transition-all">
+            Editar
+          </button>
+          <button (click)="excluir(t)" 
+                  class="px-4 py-3 bg-red-50 text-red-500 rounded-2xl hover:bg-red-500 hover:text-white transition-all">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="!loading && (tutores.length > 0 || currentPage > 0)" class="mt-16 flex justify-center items-center gap-4">
+    <button (click)="mudarPagina(false)" [disabled]="currentPage === 0 || loading"
+            class="px-6 py-3 bg-white border border-gray-200 rounded-2xl hover:bg-gray-50 disabled:opacity-30 transition-all font-bold text-gray-600 shadow-sm">
+      ← Anterior
+    </button>
+    
+    <div class="bg-blue-900 text-white px-6 py-3 rounded-2xl font-black shadow-lg">
+      {{ currentPage + 1 }}
+    </div>
+    
+    <button (click)="mudarPagina(true)" [disabled]="tutores.length < 10 || loading" 
+            class="px-6 py-3 bg-white border border-gray-200 rounded-2xl hover:bg-gray-50 disabled:opacity-30 transition-all font-bold text-gray-600 shadow-sm">
+      Próxima →
+    </button>
+  </div>
+</div>

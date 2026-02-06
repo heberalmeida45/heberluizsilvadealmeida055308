@@ -1,26 +1,55 @@
-<div class="pet-card-container bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100 h-full flex flex-col">
+<div class="relative group bg-white rounded-2xl shadow-md overflow-hidden border border-gray-100 transition-all hover:shadow-xl flex flex-col h-full">
   
-  <div class="pet-image-container h-48 bg-blue-50 flex items-center justify-center">
-    <img [src]="pet.fotoUrl || 'https://placehold.co/400x300/1e3a8a/ffffff?text=Pet+MT'" 
-     class="card-img-top" 
-     [alt]="pet.nome">
-    
-    <span class="absolute top-3 right-3 bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-md">
-      {{ pet.especie }}
+  <div class="relative h-48 overflow-hidden bg-gray-100">
+    <img *ngIf="pet?.foto?.url" 
+         [src]="pet.foto?.url" 
+         class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+         alt="Foto de {{ pet.nome }}">
+
+    <div *ngIf="!pet?.foto?.url" 
+         class="w-full h-full flex flex-col items-center justify-center text-gray-400">
+      <svg class="w-12 h-12 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+      </svg>
+      <span class="text-xs italic">Sem foto</span>
+    </div>
+
+    <span class="absolute top-3 right-3 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-blue-900 shadow-sm">
+      {{ pet.raca }}
     </span>
   </div>
 
-  <div class="p-5 flex-grow">
+  <div class="p-5 flex-grow flex flex-col">
     <h3 class="text-xl font-bold text-gray-800 mb-1">{{ pet.nome }}</h3>
     <p class="text-sm text-gray-500 mb-3 flex items-center">
       <span class="mr-2">📍</span> {{ pet.raca }}
     </p>
     
-    <div class="flex justify-between items-center mt-4">
+    <div class="flex justify-between items-center mt-auto">
       <span class="text-blue-900 font-semibold text-lg">{{ pet.idade }} anos</span>
-      <button class="bg-blue-100 text-blue-900 hover:bg-blue-900 hover:text-white px-4 py-2 rounded-lg font-medium transition-all">
+      
+      <button [routerLink]="['/pets', pet.id]" 
+              class="ml-4 bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg text-sm font-semibold transition-colors">
         Ver Detalhes
       </button>
     </div>
   </div>
+
+  <button [routerLink]="['/pets/editar', pet.id]" 
+          class="absolute top-2 left-2 p-2 bg-blue-100/90 backdrop-blur text-blue-600 rounded-full hover:bg-blue-600 hover:text-white transition-all shadow-sm opacity-0 group-hover:opacity-100 z-10">
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+    </svg>
+  </button>
+
+  <button (click)="onExcluir()" 
+          class="absolute top-2 left-12 p-2 bg-red-100/90 backdrop-blur text-red-600 rounded-full hover:bg-red-600 hover:text-white transition-all shadow-sm opacity-0 group-hover:opacity-100 z-10">
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+    </svg>
+  </button>
+
 </div>
+
+
+

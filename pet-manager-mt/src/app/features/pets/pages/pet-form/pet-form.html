@@ -1,5 +1,12 @@
 <div class="max-w-2xl mx-auto mt-10 p-6 bg-white rounded-xl shadow-lg border border-gray-100">
-  <h2 class="text-2xl font-bold text-blue-900 mb-6 text-center">Cadastrar Novo Pet - MT</h2>
+  
+  <div *ngIf="tutorIdVinculado && !isEdicao" class="mb-4 p-3 bg-green-100 text-green-700 rounded-lg border border-green-200 text-sm">
+    ✅ Vinculando este pet ao Tutor ID: <strong>{{ tutorIdVinculado }}</strong>
+  </div>
+
+  <h2 class="text-2xl font-bold text-blue-900 mb-6 text-center">
+    {{ isEdicao ? 'Editar Dados do Pet' : 'Cadastrar Novo Pet - MT' }}
+  </h2>
 
   <form [formGroup]="petForm" (ngSubmit)="onSubmit()" class="space-y-4">
     <div>
@@ -28,13 +35,25 @@
     </div>
 
     <div class="mt-4">
-      <label class="block text-sm font-medium text-gray-700">Foto do Pet (Opcional)</label>
+      <label class="block text-sm font-medium text-gray-700">
+        {{ isEdicao ? 'Alterar Foto (Deixe vazio para manter a atual)' : 'Foto do Pet (Opcional)' }}
+      </label>
       <input type="file" (change)="onFileSelected($event)" class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-blue-50 file:text-blue-700">
     </div>
 
-    <button type="submit" [disabled]="petForm.invalid || loading" 
-            class="w-full bg-blue-600 text-white py-3 rounded-lg font-bold hover:bg-blue-700 disabled:bg-gray-400 transition-colors mt-6">
-      {{ loading ? 'Salvando...' : 'Cadastrar Pet' }}
+    <button type="submit" 
+            [disabled]="loading || petForm.invalid"
+            class="w-full py-3 rounded-xl font-bold text-white transition-all
+                   {{ (loading || petForm.invalid) ? 'bg-gray-400' : (isEdicao ? 'bg-orange-600 hover:bg-orange-700' : 'bg-blue-700 hover:bg-blue-800') }}">
+      
+      <span *ngIf="!loading">
+        {{ isEdicao ? 'Salvar Alterações' : 'Confirmar Cadastro' }}
+      </span>
+      <span *ngIf="loading">Processando...</span>
+    </button>
+
+    <button type="button" (click)="sucesso()" class="w-full text-sm text-gray-500 hover:text-gray-700 mt-2">
+      Cancelar e Voltar
     </button>
   </form>
 </div>
