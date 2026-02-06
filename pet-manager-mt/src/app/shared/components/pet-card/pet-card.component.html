@@ -1,5 +1,6 @@
 <div class="relative group bg-white rounded-2xl shadow-md overflow-hidden border border-gray-100 transition-all hover:shadow-xl flex flex-col h-full">
   
+<<<<<<< HEAD
   <div class="relative h-48 overflow-hidden bg-gray-100">
     <img *ngIf="pet?.foto?.url" 
          [src]="pet.foto?.url" 
@@ -16,6 +17,15 @@
 
     <span class="absolute top-3 right-3 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-blue-900 shadow-sm">
       {{ pet.raca }}
+=======
+  <div class="pet-image-container h-48 bg-blue-50 flex items-center justify-center">
+    <img [src]="pet.foto || 'https://placehold.co/400x300/1e3a8a/ffffff?text=Pet+MT'" 
+     class="card-img-top" 
+     [alt]="pet.nome">
+    
+    <span class="absolute top-3 right-3 bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-md">
+      {{ pet.especie }}
+>>>>>>> deb8838b68351c5a7ca028964bc7cd557a5cc154
     </span>
   </div>
 
@@ -27,11 +37,18 @@
     
     <div class="flex justify-between items-center mt-auto">
       <span class="text-blue-900 font-semibold text-lg">{{ pet.idade }} anos</span>
+<<<<<<< HEAD
       
       <button [routerLink]="['/pets', pet.id]" 
               class="ml-4 bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg text-sm font-semibold transition-colors">
         Ver Detalhes
       </button>
+=======
+      <button [routerLink]="['/pets', pet.id]" 
+        class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg text-sm font-semibold transition-colors">
+  Ver Detalhes
+</button>
+>>>>>>> deb8838b68351c5a7ca028964bc7cd557a5cc154
     </div>
   </div>
 

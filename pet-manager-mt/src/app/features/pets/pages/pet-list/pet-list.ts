@@ -5,7 +5,10 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { PetFacade } from '../../../../facades/pet.facade';
 import { PetCardComponent } from '../../../../shared/components/pet-card/pet-card.component';
+<<<<<<< HEAD
 import { PetService } from '../../../../core/services/pet.service';
+=======
+>>>>>>> deb8838b68351c5a7ca028964bc7cd557a5cc154
 
 @Component({
   selector: 'app-pet-list',
@@ -24,6 +27,7 @@ export class PetList implements OnInit {
   searchControl = new FormControl('');
   currentPage = 0;
 
+<<<<<<< HEAD
   constructor(
     public petFacade: PetFacade,
     private petService: PetService 
@@ -32,6 +36,12 @@ export class PetList implements OnInit {
   ngOnInit(): void {
     this.petFacade.loadPets(this.currentPage);
     
+=======
+  constructor(public petFacade: PetFacade) {}
+
+  ngOnInit(): void {
+    this.petFacade.loadPets(this.currentPage);
+>>>>>>> deb8838b68351c5a7ca028964bc7cd557a5cc154
     this.searchControl.valueChanges.pipe(
       debounceTime(300),
       distinctUntilChanged()
@@ -50,6 +60,7 @@ export class PetList implements OnInit {
     
     this.petFacade.loadPets(this.currentPage, this.searchControl.value || '');
   }
+<<<<<<< HEAD
 
  excluir(pet: any) {
   if (confirm(`Deseja realmente excluir o pet "${pet.nome}"?`)) {   
@@ -81,4 +92,6 @@ private executarExclusaoFinal(petId: number) {
     }
   });
 }
+=======
+>>>>>>> deb8838b68351c5a7ca028964bc7cd557a5cc154
 }

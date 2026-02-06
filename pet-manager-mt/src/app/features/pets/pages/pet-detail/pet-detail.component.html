@@ -12,6 +12,7 @@
   <div *ngIf="!loading && pet" class="bg-white shadow-2xl rounded-2xl overflow-hidden border border-gray-100">
   <div class="md:flex">
     
+<<<<<<< HEAD
     <div class="relative w-full h-80 mb-6">
   <img *ngIf="pet?.foto?.url" 
      [src]="pet.foto?.url" 
@@ -23,6 +24,17 @@
     <span class="text-gray-400 italic">Sem foto disponível</span>
   </div>
 </div>
+=======
+    <div class="md:w-1/2 h-80 md:h-auto bg-gray-200">
+      
+     <img #petImg
+     [src]="'https://pet-manager-api.geia.vip/v1/pets/' + pet.id + '/fotos'" 
+     [alt]="pet.nome"
+     (error)="petImg.src = 'https://via.placeholder.com/400x400?text=Sem+Foto'"
+     class="w-full h-full object-cover">
+           
+    </div>
+>>>>>>> deb8838b68351c5a7ca028964bc7cd557a5cc154
 
       <div class="md:w-1/2 p-8">
         <div class="mb-6">

@@ -13,7 +13,10 @@ import { CommonModule } from '@angular/common';
 export class PetCardComponent {
   @Input() pet!: Pet;
   @Output() clickDetalhes = new EventEmitter<number>();
+<<<<<<< HEAD
   @Output() clickExcluir = new EventEmitter<Pet>(); 
+=======
+>>>>>>> deb8838b68351c5a7ca028964bc7cd557a5cc154
 
   verDetalhes() {
     if (this.pet.id) {

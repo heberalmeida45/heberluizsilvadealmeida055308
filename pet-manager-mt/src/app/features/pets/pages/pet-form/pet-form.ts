@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+<<<<<<< HEAD
 import { ActivatedRoute, Router } from '@angular/router';
+=======
+import { ActivatedRoute } from '@angular/router';
+>>>>>>> deb8838b68351c5a7ca028964bc7cd557a5cc154
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { PetService } from '../../../../core/services/pet.service';
@@ -32,6 +36,7 @@ export class PetFormComponent implements OnInit {
     });
   }
 
+<<<<<<< HEAD
   ngOnInit() {   
     this.petId = this.route.snapshot.params['id'];
     if (this.petId) {
@@ -81,16 +86,49 @@ export class PetFormComponent implements OnInit {
             this.executarVinculo(this.tutorIdVinculado, petId);
           } else {
             this.prosseguirAposCadastro(petId);
+=======
+  ngOnInit() {      
+    this.route.queryParams.subscribe(params => {
+      if (params['tutorId']) {
+        this.tutorIdVinculado = +params['tutorId'];
+        console.log('Tutor vinculado detectado:', this.tutorIdVinculado);
+      }
+    });
+  }  
+  onSubmit() {
+    if (this.petForm.valid) {
+      this.loading = true; 
+
+      const dadosCompletos = {
+        ...this.petForm.value,
+        tutores: this.tutorIdVinculado ? [{ id: this.tutorIdVinculado }] : []
+      };
+
+      this.petService.cadastrar(dadosCompletos).subscribe({     
+        next: (petSalvo) => {
+          console.log('Pet salvo com ID:', petSalvo.id);  
+          
+          if (this.selectedFile && petSalvo.id) {   
+            this.uploadFoto(Number(petSalvo.id));
+          } else {
+            this.sucesso();
+>>>>>>> deb8838b68351c5a7ca028964bc7cd557a5cc154
           }
         },
         error: (err) => {
           this.loading = false;
+<<<<<<< HEAD
           alert('Erro ao salvar pet.');
+=======
+          console.error('Erro ao cadastrar:', err);
+          alert('Erro ao salvar pet. Verifique os dados.');
+>>>>>>> deb8838b68351c5a7ca028964bc7cd557a5cc154
         }
       });
     }
   }
 
+<<<<<<< HEAD
   private executarVinculo(tutorId: number, petId: number) {
     this.petService.vincularTutor(tutorId, petId).subscribe({
       next: () => this.prosseguirAposCadastro(petId),
@@ -122,5 +160,24 @@ export class PetFormComponent implements OnInit {
     if (event.target.files && event.target.files.length > 0) {
       this.selectedFile = event.target.files[0];
     }
+=======
+  private uploadFoto(id: number) {
+    this.petService.uploadFoto(id, this.selectedFile!).subscribe({
+      next: () => this.sucesso(),
+      error: () => {
+        alert('Pet cadastrado, mas houve erro ao subir a foto.');
+        this.sucesso(); 
+      }
+    });
+  }
+
+  private sucesso() {
+    this.loading = false;
+    this.router.navigate(['/pets']); 
+  }
+
+  onFileSelected(event: any) {
+    this.selectedFile = event.target.files[0];
+>>>>>>> deb8838b68351c5a7ca028964bc7cd557a5cc154
   }
 }

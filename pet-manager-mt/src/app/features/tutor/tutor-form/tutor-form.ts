@@ -1,7 +1,14 @@
+<<<<<<< HEAD
 import { Component, OnInit } from '@angular/core';
 import { CommonModule, Location } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+=======
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
+>>>>>>> deb8838b68351c5a7ca028964bc7cd557a5cc154
 import { TutorService } from '../../../core/services/tutor.service';
 
 @Component({
@@ -10,25 +17,38 @@ import { TutorService } from '../../../core/services/tutor.service';
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './tutor-form.html'
 })
+<<<<<<< HEAD
 export class TutorFormComponent implements OnInit {
   tutorForm: FormGroup;
   loading = false;
   isEdicao = false;
   tutorId: number | null = null;
   selectedFile: File | null = null;
+=======
+export class TutorFormComponent {
+  tutorForm: FormGroup;
+  loading = false;
+>>>>>>> deb8838b68351c5a7ca028964bc7cd557a5cc154
 
   constructor(
     private fb: FormBuilder,
     private tutorService: TutorService,
+<<<<<<< HEAD
     private router: Router,
     private route: ActivatedRoute, 
     private location: Location
   ) {
+=======
+    private router: Router
+  ) {
+  
+>>>>>>> deb8838b68351c5a7ca028964bc7cd557a5cc154
     this.tutorForm = this.fb.group({
       nome: ['', [Validators.required, Validators.minLength(3)]],
       email: ['', [Validators.required, Validators.email]],
       telefone: ['', [Validators.required]],
       endereco: ['', [Validators.required]],
+<<<<<<< HEAD
       cpf: ['', [Validators.required]] 
     });
   }
@@ -216,6 +236,33 @@ irParaNovoPet() {
     });
   } else {
     alert('Erro: ID do tutor não encontrado para vinculação.');
+=======
+      cpf: ['', [Validators.required, Validators.pattern(/^\d{11}$/)]] 
+    });
+  }
+
+ salvarTutor() {
+  if (this.tutorForm.valid) {
+    this.loading = true;    
+    
+    const dadosParaEnviar = {
+      ...this.tutorForm.value,    
+      cpf: Number(this.tutorForm.value.cpf.replace(/\D/g, ''))
+    };
+
+    console.log('Dados que estão saindo para a API:', dadosParaEnviar);
+
+   this.tutorService.createTutor(dadosParaEnviar).subscribe({
+  next: (tutorCriado) => {
+    alert('Tutor cadastrado! Agora vamos cadastrar o pet.');   
+    this.router.navigate(['/pets/novo'], { queryParams: { tutorId: tutorCriado.id } });
+  },
+  error: (err) => {
+    this.loading = false;
+    alert('Erro ao salvar tutor.');
+  }
+});
+>>>>>>> deb8838b68351c5a7ca028964bc7cd557a5cc154
   }
 }
 }

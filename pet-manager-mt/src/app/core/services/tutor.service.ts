@@ -14,6 +14,7 @@ export class TutorService {
 
   getTutores(): Observable<Tutor[]> {
     return this.http.get<Tutor[]>(this.apiUrl);
+<<<<<<< HEAD
   }
  
   getTutorById(id: number | string): Observable<Tutor> {
@@ -28,6 +29,18 @@ export class TutorService {
 
 listarTutores(page: number = 0, nome: string = ''): Observable<any> { 
     return this.http.get(`${this.apiUrl}?page=${page}&size=10`);
+=======
+  }
+ 
+  getTutorById(id: number | string): Observable<Tutor> {
+    return this.http.get<Tutor>(`${this.apiUrl}/${id}`);
+  }
+  createTutor(tutor: Tutor): Observable<Tutor> {   
+    return this.http.post<Tutor>(this.apiUrl, tutor);
+  }
+  updateTutor(id: number, tutor: Tutor): Observable<Tutor> {
+    return this.http.put<Tutor>(`${this.apiUrl}/${id}`, tutor);
+>>>>>>> deb8838b68351c5a7ca028964bc7cd557a5cc154
   }
 
 buscarPorId(id: number | string): Observable<any> {
